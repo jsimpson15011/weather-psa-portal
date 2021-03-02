@@ -9,6 +9,11 @@ const Screen = () => {
             id: "users",
             content:
             <screenComponents.Users/>
+        },
+        {
+            id: "announcements",
+            content:
+            <screenComponents.Announcements/>
         }
     ]
 

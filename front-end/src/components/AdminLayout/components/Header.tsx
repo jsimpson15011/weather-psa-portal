@@ -18,6 +18,7 @@ const Header = () => {
                 <ul className="header-nav__list">
                     <li className="header-nav__item">
                         <Link to={`${url}/users`}>Users</Link>
+                        <Link to={`${url}/announcements`}>Announcements</Link>
                     </li>
                 </ul>
             </nav>

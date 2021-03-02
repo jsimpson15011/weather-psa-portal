@@ -32,4 +32,21 @@ router.post('/', function (req, res, next) {
   res.send().status(200)
 })
 
+/*POST new announcement*/
+router.post('/:id', function (req, res, next) {
+  const newAnnouncement = req.body
+  const id = req.params.id
+
+  fakeAnnouncements = fakeAnnouncements.map(announcement => {
+    console.log(id)
+    console.log(announcement.id)
+    if(parseInt(announcement.id) === parseInt(id)){
+      return newAnnouncement
+    } else {
+      return announcement
+    }
+  })
+  res.send().status(200)
+})
+
 module.exports = router
