@@ -22,9 +22,7 @@ const validationSchema = yup.object({
         .string()
         .required('Announcement name is Required'),
     body: yup
-        .string(),
-    isAdmin: yup
-        .bool()
+        .string()
 })
 
 
@@ -51,8 +49,7 @@ const AnnouncementForm = ({
                     title: values.announcementName,
                     body: values.body,
                     expiration: new Date(),
-                    id: 3,
-                    isApproved: true
+                    isApproved: values.isApproved
                 }))
                 history.push('/admin/announcements')
             } catch (e) {
