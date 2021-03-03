@@ -17,7 +17,7 @@ const Announcements = () => {
             <div>
                 <h2>Announcement</h2>
                 <div>
-                    {id}
+                    <AnnouncementForm currentId={parseInt(id)}/>
                 </div>
             </div>
         )

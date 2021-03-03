@@ -1,5 +1,5 @@
 export interface IAnnouncement {
-    id?: number,
+    id?: number | null,
     title: string,
     body: string,
     isApproved: boolean,

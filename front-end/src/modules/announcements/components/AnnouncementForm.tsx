@@ -28,19 +28,21 @@ const validationSchema = yup.object({
 
 const AnnouncementForm = ({
                               announcements,
-                              dispatch
-                          }: { announcements: { announcements: IAnnouncement[] }, dispatch: any }) => {
+                              dispatch,
+                              currentId
+                          }: { announcements: { announcements: IAnnouncement[] }, dispatch: any, currentId?: number }) => {
     useEffect(() => {
         dispatch(t.fetchAnnouncement())
     }, [dispatch])
 
     let history = useHistory();
+    const currentAnnouncement = announcements.announcements.filter(announcement => announcement.id === currentId)[0]
 
     const formik = useFormik({
         initialValues: {
-            announcementName: "",
-            body: "",
-            isApproved: true
+            announcementName: currentAnnouncement ? currentAnnouncement.title : "",
+            body: currentAnnouncement ? currentAnnouncement.body : "",
+            isApproved: currentAnnouncement ? currentAnnouncement.isApproved : true
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
@@ -49,8 +51,9 @@ const AnnouncementForm = ({
                     title: values.announcementName,
                     body: values.body,
                     expiration: new Date(),
-                    isApproved: values.isApproved
-                }))
+                    isApproved: values.isApproved,
+                    id: currentAnnouncement ? currentAnnouncement.id : null
+                }, currentAnnouncement ? currentAnnouncement.id : null))
                 history.push('/admin/announcements')
             } catch (e) {
                 console.log(e.message)
@@ -107,7 +110,7 @@ const AnnouncementForm = ({
                         } label="Show Announcement on Site"
                                           checked={formik.values.isApproved}
                         />
-                        <Button type="submit" variant="contained" color="primary">Add Announcement</Button>
+                        <Button type="submit" variant="contained" color="primary">{currentAnnouncement ? "Edit Announcement" : "Add Announcement"}</Button>
                     </form>
                 </Box>
             </Paper>
