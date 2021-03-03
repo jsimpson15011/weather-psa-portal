@@ -49,4 +49,14 @@ router.post('/:id', function (req, res, next) {
   res.send().status(200)
 })
 
+/*DELETE announcement*/
+router.delete('/:id', function (req, res, next) {
+  const id = req.params.id
+
+  fakeAnnouncements = fakeAnnouncements.filter(announcement => {
+    return parseInt(announcement.id) !== parseInt(id);
+  })
+  res.send().status(204)
+})
+
 module.exports = router

@@ -27,3 +27,17 @@ export const updateAnnouncement = (
         getAnnouncement(announcements.data)
     )
 }
+
+export const deleteAnnouncement = (
+    id: number
+): AppThunk => async dispatch => {
+    try {
+        await axios.delete("/api/announcements/"+id)
+        const announcements = await axios.get("/api/announcements")
+        dispatch(
+            getAnnouncement(announcements.data)
+        )
+    } catch (e){
+        return e
+    }
+}
