@@ -9,11 +9,17 @@ import {Box, Button, Container, IconButton, Paper, Snackbar} from "@material-ui/
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
 import {Link, useParams, useRouteMatch} from "react-router-dom";
+import * as system from "../../system/selectors"
+import * as systemTypes from "../../system/model"
+import * as users from "../../users/selectors"
+import * as usersTypes from "../../users/model"
 
 const AnnouncementList = ({
                               announcements,
-                              dispatch
-                          }: { announcements: { announcements: IAnnouncement[] }, dispatch: any }) => {
+                              dispatch,
+                              user,
+                              users
+                          }: { announcements: { announcements: IAnnouncement[] }, dispatch: any, user: systemTypes.IUser, users: { users: usersTypes.IUser[] } }) => {
     let {url} = useRouteMatch()
     const {action, id} = useParams<{
         action: string,
@@ -75,9 +81,6 @@ const AnnouncementList = ({
             disableClickEventBubbling: true,
             renderCell: (params: GridCellParams) => {
                 const handleClick = (e: any, isApproved: any, id: any) => {
-                    const announcementToUpdate = announcements.announcements.filter(announcement => {
-                        return announcement.id === id
-                    })[0]
                     const updatedAnnouncement = {...announcementToUpdate, isApproved: !announcementToUpdate.isApproved}
                     try {
                         dispatch(t.updateAnnouncement(updatedAnnouncement, id))
@@ -88,7 +91,12 @@ const AnnouncementList = ({
                 const isApproved = params.getValue("isApproved")
                 const approved = params.getValue("isApproved") ? "Disapprove" : "Approve"
                 const id = params.getValue("id")
-                return <Button color={isApproved ? "secondary" : "primary"} variant="outlined"
+                const announcementToUpdate = announcements.announcements.filter(announcement => {
+                    return announcement.id === id
+                })[0]
+                return <Button disabled={!(user.isAdmin || announcementToUpdate.owner === user.id)}
+                               color={isApproved ? "secondary" : "primary"}
+                               variant="outlined"
                                onClick={(e) => handleClick(e, isApproved, id)}>{approved}</Button>;
             }
         },
@@ -100,9 +108,12 @@ const AnnouncementList = ({
             sortable: false,
             disableClickEventBubbling: true,
             renderCell: (params: GridCellParams) => {
+
+                const id = params.getValue("id")
+                const currentAnnouncement = announcements.announcements.filter(announcement => announcement.id === id)[0]
+
                 const handleClick = (e: any, id: any) => {
                     try {
-                        const currentAnnouncement = announcements.announcements.filter(announcement => announcement.id === id)[0]
                         setJustDeleted(currentAnnouncement)
                         dispatch(t.deleteAnnouncement(id))
                         setOpen(true)
@@ -111,20 +122,26 @@ const AnnouncementList = ({
                         console.log(e)
                     }
                 }
-                const id = params.getValue("id")
-                return <IconButton aria-label="delete" onClick={(e) => handleClick(e, id)}>
+                return <IconButton disabled={!(user.isAdmin || currentAnnouncement.owner === user.id)} aria-label="delete" onClick={(e) => handleClick(e, id)}>
                     <DeleteIcon/>
                 </IconButton>;
             }
         },
+        {
+            field: "owner",
+            headerName: "Owner",
+            width: 100,
+        }
     ]
 
     const announcementRows = announcements.announcements.map(announcement => {
+        const owner = users.users.filter(user => user.id === announcement.owner)[0]
         return (
             {
                 id: announcement.id,
                 title: announcement.title,
-                isApproved: announcement.isApproved
+                isApproved: announcement.isApproved,
+                owner: owner ? owner.userName : ""
             }
         )
     })
@@ -164,6 +181,8 @@ const AnnouncementList = ({
 
 export default connect(
     createStructuredSelector({
-        announcements: getAnnouncement
+        announcements: getAnnouncement,
+        user: system.getUser,
+        users: users.getUser
     })
 )(AnnouncementList)

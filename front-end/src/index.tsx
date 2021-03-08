@@ -3,7 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import store from "./modules";
+import {fetchUser} from "./modules/users/actions";
+import {fetchAnnouncement} from "./modules/announcements/actions";
 
+
+store.dispatch<any>(fetchUser())
+store.dispatch<any>(fetchAnnouncement())
 ReactDOM.render(
   <React.StrictMode>
     <App />

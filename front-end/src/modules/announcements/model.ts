@@ -3,5 +3,6 @@ export interface IAnnouncement {
     title: string,
     body: string,
     isApproved: boolean,
-    expiration: Date
+    expiration?: Date,
+    owner?: number | null
 }

@@ -34,7 +34,7 @@ const LoginForm = ({user, dispatch}: { user: IUser, dispatch: any }) => {
         onSubmit: async (values) => {
         dispatch({
             type: t.LOGIN,
-            payload: {userName: values.userName, isAdmin: values.userName === "admin", id: 3}
+            payload: {userName: values.userName, isAdmin: values.userName === "admin", id: values.userName === "admin" ? 3 : 2} // This needs to be changed when live
         })
         history.replace(from) //This probably will end up going in a redux thunk eventually
     }

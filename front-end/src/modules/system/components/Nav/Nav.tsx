@@ -10,7 +10,7 @@ import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
 import {getUser} from "../../selectors";
 import LoginPage from "../../../../pages/LoginPage";
-import {AdminRoute, PrivateRoute} from "./components/Routes";
+import {PrivateRoute} from "./components/Routes";
 import Permission from "../../../../pages/admin/Permission";
 import Dashboard from "../../../../pages/admin/Dashboard";
 
@@ -21,9 +21,9 @@ const Nav = ({user}: { user: IUser }) => {
                 <PrivateRoute user={user} exact path="/">
                     <Home/>
                 </PrivateRoute>
-                <AdminRoute user={user} path="/admin">
+                <PrivateRoute user={user} path="/admin">
                     <Dashboard/>
-                </AdminRoute>
+                </PrivateRoute>
                 <Route exact path="/login">
                     <LoginPage/>
                 </Route>

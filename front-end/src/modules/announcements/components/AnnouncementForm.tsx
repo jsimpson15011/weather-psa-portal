@@ -16,6 +16,8 @@ import {
 import {useHistory} from "react-router-dom";
 import {useFormik} from "formik";
 import * as yup from "yup";
+import * as system from "../../system/selectors";
+import * as systemTypes from "../../system/model";
 
 const validationSchema = yup.object({
     announcementName: yup
@@ -25,12 +27,12 @@ const validationSchema = yup.object({
         .string()
 })
 
-
 const AnnouncementForm = ({
                               announcements,
                               dispatch,
-                              currentId
-                          }: { announcements: { announcements: IAnnouncement[] }, dispatch: any, currentId?: number }) => {
+                              currentId,
+                              user
+                          }: { announcements: { announcements: IAnnouncement[] }, dispatch: any, currentId?: number, user: systemTypes.IUser }) => {
     useEffect(() => {
         dispatch(t.fetchAnnouncement())
     }, [dispatch])
@@ -52,7 +54,8 @@ const AnnouncementForm = ({
                     body: values.body,
                     expiration: new Date(),
                     isApproved: values.isApproved,
-                    id: currentAnnouncement ? currentAnnouncement.id : null
+                    id: currentAnnouncement ? currentAnnouncement.id : null,
+                    owner: currentAnnouncement ? currentAnnouncement.owner : user.id
                 }, currentAnnouncement ? currentAnnouncement.id : null))
                 history.push('/admin/announcements')
             } catch (e) {
@@ -110,7 +113,8 @@ const AnnouncementForm = ({
                         } label="Show Announcement on Site"
                                           checked={formik.values.isApproved}
                         />
-                        <Button type="submit" variant="contained" color="primary">{currentAnnouncement ? "Edit Announcement" : "Add Announcement"}</Button>
+                        <Button type="submit" variant="contained"
+                                color="primary">{currentAnnouncement ? "Edit Announcement" : "Add Announcement"}</Button>
                     </form>
                 </Box>
             </Paper>
@@ -120,6 +124,7 @@ const AnnouncementForm = ({
 
 export default connect(
     createStructuredSelector({
-        announcements: getAnnouncement
+        announcements: getAnnouncement,
+        user: system.getUser
     })
 )(AnnouncementForm)
