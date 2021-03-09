@@ -1,13 +1,14 @@
 import React from "react";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {getUser} from "../selectors";
-import {IUser} from "../model"
-import * as t from "../actionTypes"
+import {getUser} from "../../selectors";
+import {IUser} from "../../model"
+import * as t from "../../actionTypes"
 import { useFormik } from "formik";
 import * as yup from 'yup';
 import {useHistory, useLocation} from "react-router-dom";
 import {Button, TextField} from "@material-ui/core";
+import LogoutButton from "./LogoutButton";
 
 const validationSchema = yup.object({
     userName: yup
@@ -66,13 +67,8 @@ const LoginForm = ({user, dispatch}: { user: IUser, dispatch: any }) => {
                 </form>
         )
     } else {
-        const handleLogout = ()=> {
-            dispatch({type: t.LOGOUT, payload: {sessionId: 2}})
-        }
-        return (
-            <Button onClick={handleLogout}>
-                Logout
-            </Button>
+        return(
+            <LogoutButton/>
         )
     }
 }

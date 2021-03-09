@@ -1,8 +1,7 @@
 import React from "react"
-import {Link, useRouteMatch} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const Header = () => {
-    let {url} = useRouteMatch()
 
     return (
         <header>
@@ -11,14 +10,6 @@ const Header = () => {
                 <ul className="header-nav__list">
                     <li className="header-nav__item">
                         <Link to="/">To Home Page</Link>
-                    </li>
-                </ul>
-            </nav>
-            <nav className="header-nav header-nav--admin">
-                <ul className="header-nav__list">
-                    <li className="header-nav__item">
-                        <Link to={`${url}/users`}>Users</Link>
-                        <Link to={`${url}/announcements`}>Announcements</Link>
                     </li>
                 </ul>
             </nav>

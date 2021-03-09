@@ -3,7 +3,7 @@ import Home from "../../../../pages/Home"
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
+    Route
 } from "react-router-dom";
 import {IUser} from "../../model";
 import {connect} from "react-redux";
