@@ -63,14 +63,22 @@ const AnnouncementList = ({
     }
 
     const columns: GridColDef[] = [
-        {field: 'id', headerName: 'ID'},
+        {field: 'id', headerName: 'ID', hide: true},
         {field: 'title', headerName: 'Announcement Name', width: 200},
         {
             field: "edit",
             headerName: "Edit",
             disableClickEventBubbling: true,
             renderCell: (params: GridCellParams) => {
-                return <Link to={`${url}/edit/${params.getValue("id")}`}><Button>Edit</Button></Link>;
+                const id = params.getValue("id");
+                const announcementToUpdate = announcements.announcements.filter(announcement => {
+                    return announcement.id === id
+                })[0]
+                return <Button component={Link}
+                               to={`${url}/edit/${id}`} variant="outlined"
+                               disabled={!(user.isAdmin || announcementToUpdate.owner === user.id)}>
+                    Edit
+                </Button>;
             }
         }
         , {
@@ -122,7 +130,8 @@ const AnnouncementList = ({
                         console.log(e)
                     }
                 }
-                return <IconButton disabled={!(user.isAdmin || currentAnnouncement.owner === user.id)} aria-label="delete" onClick={(e) => handleClick(e, id)}>
+                return <IconButton disabled={!(user.isAdmin || currentAnnouncement.owner === user.id)}
+                                   aria-label="delete" onClick={(e) => handleClick(e, id)}>
                     <DeleteIcon/>
                 </IconButton>;
             }
